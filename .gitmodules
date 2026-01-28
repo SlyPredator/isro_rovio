@@ -1,0 +1,6 @@
+[submodule "rovio"]
+	path = rovio
+	url = https://github.com/ethz-asl/rovio/
+[submodule "kindr"]
+	path = kindr
+	url = https://github.com/ethz-asl/kindr/
