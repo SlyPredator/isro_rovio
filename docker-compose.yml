@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  isro_rovio:
+    build: .
+    container_name: isro_rovio
+    network_mode: host
+    privileged: true
+    volumes:
+      - .:/catkin_ws/src/isro_rovio
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev:/dev
+      - /dev/dri:/dev/dri
+      - /run/udev:/run/udev:ro
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+    stdin_open: true
+    tty: true
+    command: /bin/bash
