@@ -24,29 +24,21 @@ RUN mkdir -p /etc/apt/keyrings && \
 ENV WORKSPACE /catkin_ws
 RUN mkdir -p $WORKSPACE/src
 
-# Initialize Workspace
 RUN cd $WORKSPACE && \
     catkin init && \
     catkin config --extend /opt/ros/noetic && \
     catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
 
-# Copy local source code into the container for the build phase
-# This assumes the Dockerfile is inside ~/isro_ws/src/isro_rovio/
 COPY . $WORKSPACE/src/isro_rovio
 
-# Apply Code Patches for Noetic/OpenCV 4 Compatibility
-# 1. Fix OpenCV 4 (Noetic) compatibility
 RUN sed -i 's/CV_GRAY2RGB/cv::COLOR_GRAY2RGB/g' $WORKSPACE/src/isro_rovio/rovio/include/rovio/ImgUpdate.hpp
-# 2. Fix OpenGL/GLEW linking for visualization
 RUN sed -i 's/${catkin_LIBRARIES}/${catkin_LIBRARIES} GLEW GL/g' $WORKSPACE/src/isro_rovio/rovio/CMakeLists.txt
-# 3. Disable Jacobian Check to prevent the D435i startup crash
 RUN sed -i 's/set(ROVIO_CHECK_JACOBIANS 1)/set(ROVIO_CHECK_JACOBIANS 0)/g' $WORKSPACE/src/isro_rovio/rovio/CMakeLists.txt
 
 # Build the workspace
 RUN cd $WORKSPACE && \
     catkin build rovio kindr -j6 --cmake-args -DCMAKE_BUILD_TYPE=Release -DMAKE_SCENE=ON
 
-# Setup Environment
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc && \
     echo "source $WORKSPACE/devel/setup.bash" >> ~/.bashrc
 
