@@ -1,7 +1,9 @@
 <launch>
+    <arg name="out_topic" default="/my_path" />
+
     <node name="rovio_path_node" pkg="rovio_tools" type="rovio_path.py" output="screen">
         <param name="parent_frame_id" value="world" />
-        <param name="child_frame_id" value="imu" />
-        <param name="out_topic_name" value="/my_path" />
+        <param name="child_frame_id"  value="imu" />
+        <param name="out_topic"       value="$(arg out_topic)" />
     </node>
 </launch>

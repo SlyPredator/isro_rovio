@@ -9,7 +9,7 @@ def path_publisher():
 
     parent_frame = rospy.get_param('~parent_frame_id', 'world')
     child_frame = rospy.get_param('~child_frame_id', 'imu')
-    out_topic = rospy.get_param('~out_topic_name', '/my_path')
+    out_topic = rospy.get_param('~out_topic', '/my_path')
 
     listener = tf.TransformListener()
     path_pub = rospy.Publisher(out_topic, Path, queue_size=10)
